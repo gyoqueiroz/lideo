@@ -1,5 +1,6 @@
 require 'thor'
 require 'rubygems'
+require 'lideo_controller'
 
 class Cli < Thor
   map %w[--version -v] => :__print_version
@@ -9,5 +10,29 @@ class Cli < Thor
   def __print_version
     spec = Gem::Specification.load('lideo.gemspec')
     puts spec.version
+  end
+
+  desc 'add [URL]', 'Adds an RSS feed url. Use -g flag to specify a group.'
+  options g: :string
+  def add(url)
+    unless valid_url?(url)
+      puts 'Invalid URL'
+      return
+    end
+
+    LideoController.new.add(url, group(options))
+  end
+
+  private
+
+  def group(options)
+    options[:g].nil? || options[:g].empty? ? 'default' : options[:g]
+  end
+
+  def valid_url?(url)
+    uri = URI.parse(url)
+    uri.is_a?(URI::HTTP) && !uri.host.nil?
+    rescue URI::InvalidURIError
+    false
   end
 end
