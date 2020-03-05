@@ -40,4 +40,43 @@ describe Cli do
       end
     end
   end
+
+  context 'when #fetch is called' do
+    let(:headlines) { ['Headline'].freeze }
+
+    context 'and there is at least one URL in the DB' do
+      context 'and no group is passed' do
+        before do
+          allow(subject).to receive(:options) { {} }
+        end
+
+        it 'calls controller with \'default\' group and prints the headlines' do
+          allow(controller_double).to receive(:fetch).with('default').and_return(headlines)
+
+          expect { subject.fetch }.to output("Headline\n").to_stdout
+        end
+      end
+
+      context 'and a group is passed' do
+        before do
+          allow(subject).to receive(:options) { { 'g': 'group' } }
+        end
+
+        it 'calls the controller with given group and prints the headlines' do
+          allow(controller_double).to receive(:fetch).with('group').and_return(headlines)
+
+          expect { subject.fetch }.to output("Headline\n").to_stdout
+        end
+      end
+    end
+
+    context 'and the DB is empty' do
+      it 'prints out no records info message' do
+        headlines = []
+        allow(controller_double).to receive(:fetch).and_return(headlines)
+
+        expect { subject.fetch }.to output("No RSS URL's found\n").to_stdout
+      end
+    end
+  end
 end

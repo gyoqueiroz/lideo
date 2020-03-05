@@ -23,6 +23,12 @@ class Cli < Thor
     LideoController.new.add(url, group(options))
   end
 
+  options g: :string
+  def fetch
+    headlines = LideoController.new.fetch(group(options))
+    puts headlines.empty? ? "No RSS URL's found" : headlines
+  end
+
   private
 
   def group(options)
