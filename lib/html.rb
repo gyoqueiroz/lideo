@@ -10,7 +10,7 @@ class Html
     view[:channels] = reorganize(headlines)
     view[:generated_at] = Time.now.strftime('%d/%m/%Y %H:%M')
 
-    file_name = "#{HOME_FOLDER}/news_feed.html"
+    file_name = "#{HOME_FOLDER}/lideo_news_feed.html"
     open(file_name, 'w') { |f|
       f.write(view.render)
     }
