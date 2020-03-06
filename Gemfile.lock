@@ -15,6 +15,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.2)
+    rss (0.2.7)
     thor (1.0.1)
 
 PLATFORMS
@@ -22,6 +23,7 @@ PLATFORMS
 
 DEPENDENCIES
   rspec
+  rss
   thor
 
 BUNDLED WITH
