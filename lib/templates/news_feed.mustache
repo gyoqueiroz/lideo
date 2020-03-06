@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lideo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2 style="text-align:left;float:left;">Lideo RSS Reader</h2>
+    <h4 style="text-align:right;float:left;">v1.0.0</h4>
+    <hr style="clear:both;"/>
+    <p><strong>Generated at:</strong> {{ generated_at }}</p>
+    <div class="panel-group" id="accordion">
+        {{#channels}}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ id }}">{{ name }}</a>
+                </h4>
+            </div>
+            <div id="collapse-{{ id }}" class="panel-collapse collapse">
+                <div class="panel-body">
+                    {{#headlines}}
+                        <a href="{{ url }}" class="block" target="_blank">
+                          <p> {{ title }} </p>
+                        </a>
+                    {{/headlines}}
+                </div>
+            </div>
+        </div>
+        {{/channels}}
+    </div>
+</div>
+
+</body>
+</html>

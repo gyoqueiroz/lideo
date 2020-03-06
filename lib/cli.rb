@@ -1,6 +1,7 @@
 require 'thor'
 require 'rubygems'
 require 'lideo_controller'
+require 'html'
 
 BANNER = "+-+-+-+-+-+ +-+-+-+\n" +
   "|L|i|d|e|o| |R|S|S|\n" +
@@ -29,15 +30,23 @@ class Cli < Thor
 
   desc 'fetch', 'Fetches and prints out the headlines of your feeds. Use -g flag to specify a group.'
   options g: :string
+  options to: :string
 
   def fetch
     headlines = LideoController.new.fetch(group(options))
     puts 'No news for you this time' if headlines.empty?
 
-    puts "#{banner}#{format_headlines_output(headlines)}" unless headlines.empty?
+    export_html(headlines) && return if
+      options[:to] && options[:to].downcase == 'html'
+
+    puts "#{banner}#{format_headlines_output(headlines)}" unless headlines.empty? || !options[:to].nil?
   end
 
   private
+
+  def export_html(headlines)
+    puts Html.new.export(headlines)
+  end
 
   def group(options)
     options[:g].nil? || options[:g].empty? ? 'default' : options[:g]

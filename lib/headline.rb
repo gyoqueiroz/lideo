@@ -8,8 +8,8 @@ class Headline
   end
 
   def ==(other)
-    !other.nil? && @title == other.title && @url == other.url &&
-      @channel == other.channel
+    !other.nil? && other.is_a?(Headline) && @title == other.title &&
+      @url == other.url && @channel == other.channel
   end
 
   def to_s

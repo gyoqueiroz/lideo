@@ -1,4 +1,7 @@
 class Printer
+  def to_html(headlines)
+    puts ''
+  end
   #def print_to_file(filename, content)
   #  if content.empty?
   #    puts "No content found"
