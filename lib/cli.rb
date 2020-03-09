@@ -42,6 +42,15 @@ class Cli < Thor
     puts "#{banner}#{format_headlines_output(headlines)}" unless headlines.empty? || !options[:to].nil?
   end
 
+  desc 'feeds', 'Outputs a list of your feeds'
+
+  def feeds
+    s = StringIO.new
+    LideoController.new.feeds.map { |feed| s << feed.to_s }
+    output = !s.string.empty? ? s.string : 'You have not added any feeds yet'
+    puts output
+  end
+
   private
 
   def export_html(headlines)

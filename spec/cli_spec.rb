@@ -54,9 +54,10 @@ describe Cli do
         end
 
         it 'calls controller with \'default\' group and prints the headlines' do
-          allow(controller_double).to receive(:fetch).with('default').and_return(headlines_grouped_by_channel)
+          allow(controller_double).to receive(:fetch).with('default')
+                                                     .and_return(headlines_grouped_by_channel)
 
-          expect { subject.fetch }.to output(/#{Regexp.quote(headline_str)}/).to_stdout
+          expect { subject.fetch }.to output(/#{output_regex(headline_str)}/).to_stdout
         end
       end
 
@@ -68,7 +69,7 @@ describe Cli do
         it 'calls the controller with given group and prints the headlines' do
           allow(controller_double).to receive(:fetch).with('group').and_return(headlines_grouped_by_channel)
 
-          expect { subject.fetch }.to output(/#{Regexp.quote(headline_str)}/).to_stdout
+          expect { subject.fetch }.to output(/#{output_regex(headline_str)}/).to_stdout
         end
       end
     end
@@ -78,8 +79,32 @@ describe Cli do
         allow(controller_double).to receive(:fetch).and_return([])
 
         output_str = "No news for you this time\n"
-        expect { subject.fetch }.to output(/#{Regexp.quote(output_str)}/).to_stdout
+        expect { subject.fetch }.to output(/#{output_regex(output_str)}/).to_stdout
       end
     end
+  end
+
+  context 'when #feeds is called' do
+    context 'and there is one or more feeds in the DB' do
+      let(:feeds) { [Feed.new('url', 'group')] }
+      it 'prints out the list of feeds in the console' do
+        allow(controller_double).to receive(:feeds).and_return(feeds)
+
+        expect { subject.feeds }.to output(/#{output_regex(feeds.first.to_s)}/).to_stdout
+      end
+    end
+
+    context 'and the DB is empty' do
+      it 'prints out no records info message' do
+        allow(controller_double).to receive(:feeds).and_return([])
+        msg = 'You have not added any feeds yet'
+
+        expect { subject.feeds }.to output(/#{output_regex(msg)}/).to_stdout
+      end
+    end
+  end
+
+  def output_regex(value)
+    Regexp.quote(value)
   end
 end

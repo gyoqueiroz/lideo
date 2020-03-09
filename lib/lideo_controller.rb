@@ -15,6 +15,10 @@ class LideoController
             .group_by(&:channel)
   end
 
+  def feeds
+    []
+  end
+
   private
 
   def fetcher

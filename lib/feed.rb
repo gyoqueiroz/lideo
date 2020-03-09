@@ -10,4 +10,8 @@ class Feed
     !other.nil? && @url == other.url && @group == other.group
   end
 
+  def to_s
+    "[#{@group}] #{@url}"
+  end
+
 end

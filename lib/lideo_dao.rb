@@ -1,3 +1,5 @@
+require 'pstore'
+
 class LideoDao
   DB_FILE_NAME = 'lideo.pstore'
   DB_FOLDER = '.lideo'
