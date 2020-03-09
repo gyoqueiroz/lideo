@@ -40,4 +40,19 @@ describe LideoDao do
       expect(subject.find('empty_group')).to eq([])
     end
   end
+
+  context 'given #all is called' do
+    before do
+      allow(pstore_double).to receive(:transaction).with(true).and_yield
+      allow(pstore_double).to receive(:roots).and_return([feed])
+      allow(pstore_double).to receive(:[]).with(feed)
+        .and_return(feed)
+    end
+
+    context 'and there is one or more feed in the DB' do
+      it 'returns a list of feeds' do
+        expect(subject.all).to eq([feed])
+      end
+    end
+  end
 end

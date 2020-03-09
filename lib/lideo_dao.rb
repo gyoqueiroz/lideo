@@ -28,13 +28,11 @@ class LideoDao
   end
 
   def all
-    []
-    #store = PStore.new(FULL_DB_FILE_PATH)
-    #list = []
-    #store.transaction(true) do
-    #  store.roots
-    #    .map { |root| list << store[root] if store[root].group == group }
-    #end
-    #list
+    store = PStore.new(FULL_DB_FILE_PATH)
+    list = []
+    store.transaction(true) do
+      store.roots.map { |root| list << store[root] }
+    end
+    list
   end
 end

@@ -46,7 +46,7 @@ class Cli < Thor
 
   def feeds
     s = StringIO.new
-    LideoController.new.feeds.map { |feed| s << feed.to_s }
+    LideoController.new.feeds.map { |feed| s << "#{feed.to_s}\n" }
     output = !s.string.empty? ? s.string : 'You have not added any feeds yet'
     puts output
   end
