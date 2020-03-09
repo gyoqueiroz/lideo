@@ -52,7 +52,7 @@ describe LideoController do
     end
   end
 
-  context 'when #feeds command is called' do
+  context 'when #feeds is called' do
     context 'and there is one or more feeds in the DB' do
       it 'calls the dao and receives a list of feeds' do
         allow(dao_double).to receive(:all).and_return(feeds)
@@ -67,6 +67,14 @@ describe LideoController do
 
         expect(subject.feeds).to eq([])
       end
+    end
+  end
+
+  context 'when #remove_feeds is called' do
+    it 'calls the dao passing the url of the feed to be removed' do
+      allow(dao_double).to receive(:delete_feed).with('url')
+
+      expect { subject.remove_feed('url') }.not_to raise_error
     end
   end
 end

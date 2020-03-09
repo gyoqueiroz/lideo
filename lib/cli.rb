@@ -46,22 +46,35 @@ class Cli < Thor
     headlines = LideoController.new.fetch(group(options))
     puts 'No news for you this time' if headlines.empty?
 
-    export_html(headlines) && return if
-      options[:to] && options[:to].downcase == 'html'
+    export_html(headlines) && return if options[:to] && options[:to].downcase == 'html'
 
     puts "#{banner}#{format_headlines_output(headlines)}" unless headlines.empty? || !options[:to].nil?
   end
 
-  desc 'feeds', 'Outputs a list of your feeds'
+  desc 'feeds', 'Outputs a list of your feeds. Use -r [URL] to remove a feed'
+  options r: :string
 
   def feeds
+    url_to_remove = from_r_option(options)
+    if url_to_remove.nil?
+      list_feeds
+    else
+      remove_feed(url_to_remove)
+    end
+  end
+
+  private
+
+  def list_feeds
     s = StringIO.new
     LideoController.new.feeds.map { |feed| s << "#{feed.to_s}\n" }
     output = !s.string.empty? ? s.string : 'You have not added any feeds yet'
     puts output
   end
 
-  private
+  def remove_feed(url)
+    LideoController.new.remove_feed(url)
+  end
 
   def export_html(headlines)
     puts Html.new.export(headlines)
@@ -69,6 +82,10 @@ class Cli < Thor
 
   def group(options)
     options[:g].nil? || options[:g].empty? ? 'default' : options[:g]
+  end
+
+  def from_r_option(options)
+    options[:r] unless options[:r].nil? || options[:r].empty?
   end
 
   def valid_url?(url)

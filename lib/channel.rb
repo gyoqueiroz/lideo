@@ -7,6 +7,6 @@ class Channel
   end
 
   def id
-    @name.gsub(/[[:space:]]/, '')
+    @name.gsub(/[^0-9a-z]/i, '')
   end
 end

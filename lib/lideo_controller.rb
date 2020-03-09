@@ -19,6 +19,10 @@ class LideoController
     LideoDao.new.all
   end
 
+  def remove_feed(url)
+    LideoDao.new.delete_feed(url)
+  end
+
   private
 
   def fetcher

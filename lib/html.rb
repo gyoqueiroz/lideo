@@ -7,7 +7,8 @@ class Html
   def export(headlines)
     Mustache.template_file = File.dirname(__FILE__) + '/templates/news_feed.mustache'
     view = Mustache.new
-    view[:channels] = reorganize(headlines)
+    view[:channels] = to_channel_array(headlines)
+    puts view[:channels].to_s
     view[:generated_at] = Time.now.strftime('%d/%m/%Y %H:%M')
 
     file_name = "#{HOME_FOLDER}/lideo_news_feed.html"
@@ -18,7 +19,7 @@ class Html
     file_name
   end
 
-  def reorganize(headlines)
+  def to_channel_array(headlines)
     headlines.collect { |key, value| Channel.new(key, value) }
   end
 end

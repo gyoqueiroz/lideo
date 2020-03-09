@@ -35,4 +35,12 @@ class LideoDao
     end
     list
   end
+
+  def delete_feed(url)
+    PStore.new(FULL_DB_FILE_PATH).transaction do |store|
+      raise ArgumentError, "Feed #{url} not found" if store[url].nil?
+
+      store.delete(url)
+    end
+  end
 end

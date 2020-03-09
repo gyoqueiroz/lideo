@@ -102,6 +102,20 @@ describe Cli do
         expect { subject.feeds }.to output(/#{output_regex(msg)}/).to_stdout
       end
     end
+
+    context 'with -r flag' do
+      context 'and there is a matching feed in the DB' do
+        before do
+          allow(subject).to receive(:options) { { 'r': 'url' } }
+        end
+
+        it 'it calls the controller to remove the feed' do
+          allow(controller_double).to receive(:remove_feed).with('url')
+
+          expect { subject.feeds }.not_to raise_error
+        end
+      end
+    end
   end
 
   def output_regex(value)
