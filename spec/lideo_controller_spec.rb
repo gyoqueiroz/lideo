@@ -10,6 +10,7 @@ describe LideoController do
   let(:fetcher_double) { double(Fetcher) }
   let(:feed_1) { Feed.new('url', 'group') }
   let(:feed_2) { Feed.new('url1', 'group1') }
+  let(:feeds) { [feed_1, feed_2].freeze }
 
   before do
     allow(LideoDao).to receive(:new).and_return(dao_double)
@@ -28,7 +29,6 @@ describe LideoController do
 
   context 'when #fetch is called' do
     context 'and a group is passed' do
-      let(:feeds) { [feed_1, feed_2].freeze }
       let(:headline) { Headline.new('Title', 'url', 'channel1') }
       let(:headline1) { Headline.new('Title1', 'url1', 'channel2') }
       let(:headlines) { [headline, headline1].freeze }
@@ -48,6 +48,24 @@ describe LideoController do
         allow(dao_double).to receive(:find).with('group').and_return([])
 
         expect(subject.fetch('group')).to eq({})
+      end
+    end
+  end
+
+  context 'when #feeds command is called' do
+    context 'and there is one or more feeds in the DB' do
+      it 'calls the dao and receives a list of feeds' do
+        allow(dao_double).to receive(:all).and_return(feeds)
+
+        expect(subject.feeds).to eq(feeds)
+      end
+    end
+
+    context 'and the database is empty' do
+      it 'calls the dao and returns an empty array' do
+        allow(dao_double).to receive(:all).and_return([])
+
+        expect(subject.feeds).to eq([])
       end
     end
   end

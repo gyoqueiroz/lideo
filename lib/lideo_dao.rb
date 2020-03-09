@@ -25,9 +25,16 @@ class LideoDao
         .map { |root| list << store[root] if store[root].group == group }
     end
     list
-    #[
-    #  Feed.new('http://feeds.bbci.co.uk/news/rss.xml', group),
-    #  Feed.new('http://rss.slashdot.org/Slashdot/slashdot', group)
-    #].freeze
+  end
+
+  def all
+    []
+    #store = PStore.new(FULL_DB_FILE_PATH)
+    #list = []
+    #store.transaction(true) do
+    #  store.roots
+    #    .map { |root| list << store[root] if store[root].group == group }
+    #end
+    #list
   end
 end

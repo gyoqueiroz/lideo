@@ -16,7 +16,7 @@ class LideoController
   end
 
   def feeds
-    []
+    LideoDao.new.all
   end
 
   private
