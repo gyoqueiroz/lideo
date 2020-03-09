@@ -29,6 +29,16 @@ class Cli < Thor
   end
 
   desc 'fetch', 'Fetches and prints out the headlines of your feeds. Use -g flag to specify a group.'
+  long_desc <<-LONGDESC
+    Fetches and prints out the headlines of your feeds. Available flags:
+    
+    With -g            Fetches feeds for the specified group only
+
+    With --to [OPTION] Fetches the feeds and outputs to the method specified in the option parameter. If omitted will output to the console.
+                       Available options: 
+                       
+                       HTML
+  LONGDESC
   options g: :string
   options to: :string
 
