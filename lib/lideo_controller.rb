@@ -9,10 +9,10 @@ class LideoController
   end
 
   def fetch(group)
-    LideoDao.new.find(group)
-            .map { |feed| fetcher.fetch(feed) }
-            .flatten
-            .group_by(&:channel)
+    feeds = group.downcase == 'all' ? LideoDao.new.all : LideoDao.new.find(group)
+    feeds.map { |feed| fetcher.fetch(feed) }
+         .flatten
+         .group_by(&:channel)
   end
 
   def feeds

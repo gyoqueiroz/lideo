@@ -28,18 +28,29 @@ describe LideoController do
   end
 
   context 'when #fetch is called' do
-    context 'and a group is passed' do
-      let(:headline) { Headline.new('Title', 'url', 'channel1') }
-      let(:headline1) { Headline.new('Title1', 'url1', 'channel2') }
-      let(:headlines) { [headline, headline1].freeze }
-      let(:headlines_grouped_by_channel) { headlines.group_by(&:channel) }
+    let(:headline) { Headline.new('Title', 'url', 'channel1') }
+    let(:headline1) { Headline.new('Title1', 'url1', 'channel2') }
+    let(:headlines) { [headline, headline1].freeze }
+    let(:headlines_grouped_by_channel) { headlines.group_by(&:channel) }
 
+    before do
+      allow(fetcher_double).to receive(:fetch).with(feed_1).and_return([headline])
+      allow(fetcher_double).to receive(:fetch).with(feed_2).and_return([headline1])
+    end
+
+    context 'and a group is passed' do
       it 'get the list of feeds and fetches the headlines grouped by channel' do
         allow(dao_double).to receive(:find).with('group').and_return(feeds)
-        allow(fetcher_double).to receive(:fetch).with(feed_1).and_return([headline])
-        allow(fetcher_double).to receive(:fetch).with(feed_2).and_return([headline1])
 
         expect(subject.fetch('group')).to eq(headlines_grouped_by_channel)
+      end
+    end
+
+    context 'and all groups are requested' do
+      it 'fetches all the existing feeds' do
+        allow(dao_double).to receive(:all).and_return(feeds)
+
+        expect(subject.fetch('all')).to eq(headlines_grouped_by_channel)
       end
     end
 
