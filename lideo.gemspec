@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'lideo'
-  s.version   = '1.1.0'
+  s.version   = '1.1.5'
   s.platform  = Gem::Platform::RUBY
   s.summary   = 'Lideo RSS Aggregator'
   s.description = 'A simple RSS aggregator CLI where you can read the headlines from your terminal'
