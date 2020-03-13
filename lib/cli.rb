@@ -25,6 +25,11 @@ class Cli < Thor
       return
     end
 
+    unless feed_works?(url)
+      puts 'A test fetch failed for the feed and as such it won\'t be added.'
+      return
+    end
+
     LideoController.new.add(url, group(options))
   end
 
@@ -64,6 +69,12 @@ class Cli < Thor
   end
 
   private
+
+  def feed_works?(url)
+    Fetcher.new.fetch(Feed.new(url, ''))
+  rescue
+    false
+  end
 
   def list_feeds
     s = StringIO.new

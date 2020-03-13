@@ -4,6 +4,7 @@ require 'headline'
 
 describe Cli do
   let(:controller_double) { double(LideoController) }
+  let(:valid_url) { 'http://avalidurl.com' }
 
   before do
     allow(LideoController).to receive(:new).and_return(controller_double)
@@ -17,7 +18,6 @@ describe Cli do
         end
 
         it 'calls the controller to save the new URL' do
-          valid_url = 'http://avalidurl.com'
           allow(controller_double).to receive(:add).with(valid_url, 'group')
 
           expect { subject.add(valid_url) }.not_to raise_error
@@ -26,10 +26,17 @@ describe Cli do
 
       context 'and no group' do
         it 'sets group \'default\' then calls controller to save the new URL' do
-          valid_url = 'http://avalidurl.com'
           allow(controller_double).to receive(:add).with(valid_url, 'default')
 
           expect { subject.add(valid_url) }.not_to raise_error
+        end
+      end
+
+      context 'and the feed is broken' do
+        it 'prints out an errors message and does not add the feed' do
+          output_str = 'A test fetch failed for the feed and as such it won\'t be added.'
+          expect { subject.add(valid_url) }
+            .to output(/#{output_regex(output_str)}/).to_stdout
         end
       end
     end
